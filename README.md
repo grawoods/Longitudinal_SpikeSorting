@@ -1,9 +1,8 @@
 # Longitudinal_SpikeSorting
+## Author: Grace Woods, Hong Lab @ Stanford
+## Spring 2023
 
-# Installation instructions:
 # Get Intan RHD File Reader
-# Navigate to Longitudinal_SpikeSorting directory
-
 ```
 mkdir src
 # Get Intan RHD File Reader (wget -P ./src 'link' for Linux/Sherlock, curl -o 'link' for MacOS)
