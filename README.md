@@ -1,6 +1,8 @@
 # Longitudinal_SpikeSorting
 ## Author: Grace Woods, Hong Lab @ Stanford
 ## Spring 2023
+### In Progress! Please check back for updates. 
+Questions? Email grawoods@stanford.edu
 
 # Get Intan RHD File Reader
 ```
