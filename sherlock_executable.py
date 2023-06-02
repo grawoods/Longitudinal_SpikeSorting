@@ -217,14 +217,11 @@ def run_spikesorting_batch(path):
 def main(args):
     print(args.datadir)
     print(args.n_components)
-    results= run_spikesorting(args.datadir)
+    results = run_spikesorting(args.datadir)
     pdb.set_trace()
     print('Memory used: '+str(getrusage(RUSAGE_SELF).ru_maxrss))
-    # do i save here?
+    # do i save here? yes do pickle dump here
 
-    #pdb.set_trace()
-    #filtered_data = utils.filter_data_per_ch()
-    # print(data.shape)
 
 if __name__== "__main__":
     parser = argparse.ArgumentParser()
