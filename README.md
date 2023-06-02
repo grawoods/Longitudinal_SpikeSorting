@@ -5,6 +5,7 @@
 Questions? Email grawoods@stanford.edu
 
 # Get Intan RHD File Reader
+If you want to get Intan loading functions from scratch, use the following:
 ```
 mkdir src
 # Get Intan RHD File Reader (wget -P ./src 'link' for Linux/Sherlock, curl -o 'link' for MacOS)
@@ -14,4 +15,4 @@ wget -P ./src https://raw.githubusercontent.com/Intan-Technologies/load-rhd-note
 curl -o ./src/importrhdutilities.py https://raw.githubusercontent.com/Intan-Technologies/load-rhd-notebook-python/main/importrhdutilities.py
 
 ```
-
+Otherwise, this file is already provided in `src/`.
