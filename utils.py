@@ -263,8 +263,7 @@ def dimred_cluster(X, n_clusters = None):
         for n_clusters in range_n_clusters:
 
             # Run k-means clustering and compute silhouette scores
-#             km = KMeans(n_clusters=n_clusters, random_state=42, n_init='auto')
-            km = KMeans(n_clusters=n_clusters, n_init='auto')
+            km = KMeans(n_clusters=n_clusters, n_init=1)#'auto')
             # import pdb
 
             # pdb.set_trace()
@@ -279,7 +278,7 @@ def dimred_cluster(X, n_clusters = None):
         n_clusters = np.argmax(silhouette_avgs) + 2 # to offset for n_clusters_0 = 2
 #         print('The ideal number of clusters from silhouette analysis is '+str(n_clusters))
 
-        km = KMeans(n_clusters=n_clusters, random_state=42, n_init='auto')
+        km = KMeans(n_clusters=n_clusters, random_state=42, n_init=1)
         cluster_labels = km.fit_predict(X)
          
         return silhouette_avgs, n_clusters, cluster_labels

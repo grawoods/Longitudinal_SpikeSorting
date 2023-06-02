@@ -12,4 +12,4 @@ ml py-scipy/1.10.1_py39
 ml viz
 ml py-matplotlib/3.4.2_py39
 
-python3 sherlock_executable.py --datadir="$SCRATCH"/SHERLOCK_TEST/200516_M200212/
+python3 sherlock_executable.py --datadir="$SCRATCH"/SHERLOCK_TEST/200516_M200212/ --maxfiles=2

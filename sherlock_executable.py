@@ -51,7 +51,7 @@ def retrieve_recording_files(path):#data_location, mouse_id, date):
 
 # Putting it all together:
 
-def filtunfilt_alldata(path, num_channels=32, batch_process=False):
+def filtunfilt_alldata(path, num_channels=32, maxfiles=-1, batch_process=False):
     """
     Function acquiring Intan recording files either in a batched or one-shot approach 
     (refer to batch_process), utilizing filter functions defined in utils.py
@@ -77,9 +77,8 @@ def filtunfilt_alldata(path, num_channels=32, batch_process=False):
         unfiltered_data = np.zeros((1, num_channels))
 
         # get unfiltered data
-        # for file in files[:2]: ## NEED TO CHANGE BEFORE SHIPPING
-        for file in files: ## NEED TO CHANGE BEFORE SHIPPING
-            intan_dat, _ = utils.load_intan_rhd_format.load_file(path+file) ## load_intan_rhd_format.load_file(args.
+        for file in files[:maxfiles]:
+            intan_dat, _ = utils.load_intan_rhd_format.load_file(path+file)
             dat = intan_dat['amplifier_data'].T
             unfiltered_data = np.append(unfiltered_data, dat, axis=0)
         # now filtered data:
@@ -101,9 +100,9 @@ def filtunfilt_alldata(path, num_channels=32, batch_process=False):
     return unfiltered_data, filtered_data
 
 
-def run_spikesorting(path):
+def run_spikesorting(path, maxfiles):
     num_channels = 32
-    unfiltered_data, filtered_data = filtunfilt_alldata(path, num_channels, batch_process=False)
+    unfiltered_data, filtered_data = filtunfilt_alldata(path, num_channels, maxfiles, batch_process=False)
     num_channels = filtered_data.shape[1]
 
     noise_allchs = np.nanmedian(np.abs(filtered_data), axis=0)
@@ -151,13 +150,13 @@ def run_spikesorting(path):
                                     'etc_metrics':{'PCA':spike_pca, 'PCA_variance': pca_variance_allchs}}
     return results_dict
 
-def run_spikesorting_batch(path):
+def run_spikesorting_batch(path, maxfiles):
     num_channels = 32
 
     files = retrieve_recording_files(path)
     num_batches = len(files)
 
-    _, filtered_data = filtunfilt_alldata(path, num_channels, batch_process=True)
+    _, filtered_data = filtunfilt_alldata(path, num_channels, maxfiles, batch_process=True)
 
 
     noise_allchs, numclusters_allchs, spiketimes_allchs, spikecluster_labels, spiketimes_cluster, \
@@ -218,7 +217,7 @@ def run_spikesorting_batch(path):
 def main(args):
     print(args.datadir)
     print(args.n_components)
-    results = run_spikesorting(args.datadir)
+    results = run_spikesorting(args.datadir, args.maxfiles)
     with open(str(args.datadir)+'/spikesorting_results.pickle', 'wb') as handle:
         pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
     print('Memory used: '+str(getrusage(RUSAGE_SELF).ru_maxrss))
@@ -230,6 +229,7 @@ if __name__== "__main__":
 
     parser.add_argument('--datadir', type=str)
     parser.add_argument('--n_components', type=int, default=3) # PCA
+    parser.add_argument('--maxfiles', type=int, default=-1)
 
     args = parser.parse_args()
     main(args)
