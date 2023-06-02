@@ -1,6 +1,7 @@
 #!/bin/bash 
 #SBATCH --job-name=test
 #SBATCH --time=3:00:00
+#SBATCH --mem=16G
 #SBATCH --output=/scratch/users/grawoods/.out/%j.out
 #SBATCH --error=/scratch/users/grawoods/.out/%j.out
 
