@@ -10,6 +10,8 @@ import pickle
 
 from resource import getrusage, RUSAGE_SELF
 
+from pathlib import Path
+
 ## IDEAS:
 # remove the num_channels dependency and just handle at the end
 def local_retrieve(mypath):
@@ -218,10 +220,21 @@ def main(args):
     print('Directory: '+str(args.datadir))
     print(args.maxfiles)
     results = run_spikesorting(args.datadir, args.maxfiles)
-    with open(str(args.datadir)+'/spikesorting_results.pickle', 'wb') as handle:
-        pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
     print('Memory used: '+str(getrusage(RUSAGE_SELF).ru_maxrss))
-    # do i save here? yes do pickle dump here
+
+    datadir = Path(args.datadir)
+
+    if args.outdir is None:
+        outdir = datadir
+    else:
+        outdir = Path(args.outdir)
+    
+    animal_id, session_id = datadir.parts[-2], datadir.parts[-1]
+    outfile = outdir/animal_id/(session_id+'.pickle')
+
+    with open(outfile, 'wb') as handle:
+        pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
 
 
 if __name__== "__main__":
@@ -230,6 +243,7 @@ if __name__== "__main__":
     parser.add_argument('--datadir', type=str)
     parser.add_argument('--n_components', type=int, default=3) # PCA
     parser.add_argument('--maxfiles', type=int, default=-1)
+    parser.add_argument('--outdir', type=str, default=None)
 
     args = parser.parse_args()
     main(args)
