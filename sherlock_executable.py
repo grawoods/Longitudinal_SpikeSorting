@@ -215,8 +215,8 @@ def run_spikesorting_batch(path, maxfiles):
     return results_dict 
 
 def main(args):
-    print(args.datadir)
-    print(args.n_components)
+    print('Directory: '+str(args.datadir))
+    print(args.maxfiles)
     results = run_spikesorting(args.datadir, args.maxfiles)
     with open(str(args.datadir)+'/spikesorting_results.pickle', 'wb') as handle:
         pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
