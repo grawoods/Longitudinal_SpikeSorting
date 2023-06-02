@@ -77,7 +77,6 @@ def filter_data_per_ch(data, passband=[250,6e3], sample_freq=20e3):
 
 
 # Thresholding
-
 def find_local_max(filtered_data):#indices, filtered_data):
     """
     Finds the local maximum of filtered_data within spike_time range, centered around indices.

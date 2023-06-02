@@ -82,7 +82,7 @@ def filtunfilt_alldata(path, num_channels=32, maxfiles=-1, batch_process=False):
             dat = intan_dat['amplifier_data'].T
             unfiltered_data = np.append(unfiltered_data, dat, axis=0)
         # now filtered data:
-        filtered_data = np.zeros((unfiltered_data.shape[0], unfiltered_data.shape[1]))
+        filtered_data = np.zeros_like(unfiltered_data)
 
         for ch in range(num_channels):
             data = unfiltered_data[:, ch]
@@ -102,7 +102,7 @@ def filtunfilt_alldata(path, num_channels=32, maxfiles=-1, batch_process=False):
 
 def run_spikesorting(path, maxfiles):
     num_channels = 32
-    unfiltered_data, filtered_data = filtunfilt_alldata(path, num_channels, maxfiles, batch_process=False)
+    _, filtered_data = filtunfilt_alldata(path, num_channels, maxfiles, batch_process=False)
     num_channels = filtered_data.shape[1]
 
     noise_allchs = np.nanmedian(np.abs(filtered_data), axis=0)
