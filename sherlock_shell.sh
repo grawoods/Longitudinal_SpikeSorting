@@ -1,3 +1,9 @@
+#!/bin/bash 
+#SBATCH --job-name=test
+#SBATCH --time=3:00:00
+#SBATCH --output=/scratch/users/grawoods/.out/%j.out
+#SBATCH --error=/scratch/users/grawoods/.out/%j.out
+
 ml python/3.9.0
 ml py-numpy/1.20.3_py39
 ml py-scikit-learn/1.0.2_py39
