@@ -6,6 +6,7 @@ import pdb
 
 import utils
 import numpy as np
+import pickle
 
 from resource import getrusage, RUSAGE_SELF
 
@@ -218,7 +219,8 @@ def main(args):
     print(args.datadir)
     print(args.n_components)
     results = run_spikesorting(args.datadir)
-    pdb.set_trace()
+    with open(str(args.datadir)+'/spikesorting_results.pickle', 'wb') as handle:
+        pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
     print('Memory used: '+str(getrusage(RUSAGE_SELF).ru_maxrss))
     # do i save here? yes do pickle dump here
 
