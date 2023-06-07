@@ -1,5 +1,6 @@
 from pathlib import Path
 import argparse
+import subprocess
 
 def generate_jobscript(animal_dir, num_sessions):
     fpath = f"_jobarray_oversessions.sh"
@@ -61,3 +62,5 @@ if __name__ == '__main__':
 
     fpath = generate_jobscript(animal_dir=animal_dir, num_sessions=num_sessions)
     print(fpath)
+
+    subprocess.run(['sbatch', fpath])
