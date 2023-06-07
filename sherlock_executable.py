@@ -143,7 +143,7 @@ def run_spikesorting(path, maxfiles):
 
     results_dict = {'Path': path, 'analysis_details': {'date of computation':date_computation, 
                                                        'time to spikesort':time_elapsed},
-                                    'data': {'unfiltered_data': unfiltered_data, 'filtered_data':filtered_data},
+                                    'data': {'filtered_data':filtered_data},
                                     'noise': noise_allchs,
                                     'spikes': {'spike_time': spiketimes_allchs, 'spike_waveforms': spike_allchs, \
                                                'spikecluster_labels': spikecluster_labels,
