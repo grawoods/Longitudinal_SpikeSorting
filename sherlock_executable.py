@@ -218,24 +218,31 @@ def run_spikesorting_batch(path, maxfiles):
 
 def main(args):
     print('Directory: '+str(args.datadir))
-    print(args.maxfiles)
-    results = run_spikesorting(args.datadir, args.maxfiles)
-    print('Memory used: '+str(getrusage(RUSAGE_SELF).ru_maxrss))
+    print('')
+    print('Analyzing '+str(args.maxfiles)+' files!')
+    print('')
+    print('Running at time: '+str(datetime.now()))
 
     datadir = Path(args.datadir)
 
+    animal_id, session_id = datadir.parts[-2], datadir.parts[-1]
+
     if args.outdir is None:
         outdir = datadir
+        outfile = outdir/(session_id+'.pickle')
     else:
         outdir = Path(args.outdir)
-    
-    animal_id, session_id = datadir.parts[-2], datadir.parts[-1]
-    outfile = outdir/animal_id/(session_id+'.pickle')
+        outfile = outdir/animal_id/(session_id+'.pickle')
+
+    if os.path.exists(outdir) != True:
+        os.makedirs(outdir)
+
+    # Getting results
+    results = run_spikesorting(args.datadir, args.maxfiles)
+    print('Memory used: '+str(getrusage(RUSAGE_SELF).ru_maxrss))
 
     with open(outfile, 'wb') as handle:
         pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-
 
 if __name__== "__main__":
     parser = argparse.ArgumentParser()

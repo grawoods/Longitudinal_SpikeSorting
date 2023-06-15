@@ -2,7 +2,7 @@ from pathlib import Path
 import argparse
 import subprocess
 
-def generate_jobscript(animal_dir, num_sessions):
+def generate_jobscript(animal_dir, num_sessions, maxfiles):
     fpath = f"_jobarray_oversessions.sh"
     with open(fpath, 'w') as f:
         sbatch_commands = [
@@ -12,7 +12,9 @@ def generate_jobscript(animal_dir, num_sessions):
             '#SBATCH --mem=20G\n',
             f'#SBATCH --output=/scratch/users/grawoods/.out/{str(animal_dir.stem)}_%j.out\n',
             f'#SBATCH --error=/scratch/users/grawoods/.out/{str(animal_dir.stem)}_%j.out\n',
-            '#SBATCH --mail-type ARRAY_TASKS\n',
+            '#SBATCH --mail-type BEGIN\n',
+            '#SBATCH --mail-type END\n',
+            '#SBATCH --mail-user=grawoods@stanford.edu\n',
             f'#SBATCH --array=0-{num_sessions-1}\n'
         ]
         f.writelines(sbatch_commands)
@@ -43,9 +45,9 @@ def generate_jobscript(animal_dir, num_sessions):
         f.writelines(ml_commands)
         f.write('\n')
 
-        f.write(f'python3 sherlock_executable \\\n')
+        f.write(f'python3 sherlock_executable.py \\\n')
         f.write(f'    --datadir={animal_dir} \\\n')
-        f.write('    --maxfiles=-1 \\\n')
+        f.write(f'    --maxfiles={maxfiles} \\\n')
         f.write(f'    --outdir={str(animal_dir.parent)}/Results\n')
         f.write('\n')
     return fpath
@@ -54,13 +56,15 @@ def generate_jobscript(animal_dir, num_sessions):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate array job script for given Animal ID')
     parser.add_argument('--animal_dir', type=str, help='Path to animal directory')
+    parser.add_argument('--maxfiles', type=int, default=-1)
 
     args = parser.parse_args()
     animal_dir = Path(args.animal_dir)
     recording_dir = [x for x in animal_dir.iterdir() if x.is_dir()]
     num_sessions = len(recording_dir)
+    maxfiles=args.maxfiles
 
-    fpath = generate_jobscript(animal_dir=animal_dir, num_sessions=num_sessions)
+    fpath = generate_jobscript(animal_dir=animal_dir, num_sessions=num_sessions, maxfiles=maxfiles)
     print(fpath)
 
     subprocess.run(['sbatch', fpath])
